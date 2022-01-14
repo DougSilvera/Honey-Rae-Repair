@@ -1,13 +1,26 @@
 import React, { useState } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useEffect } from "react/cjs/react.development";
+
 
 export const TicketForm = () => {
     const [ticket, updateTicket] = useState({
         description: "",
-        emergency: false
+        emergency: false,
+        employeeId:"",
     });
-    
-    const history = useHistory()
+    const [employees, setEmployee]= useState([]);
+    const history = useHistory();
+
+    useEffect(() => {
+        fetch("http://localhost:8088/employees")
+            .then(resp => resp.json())
+            .then((data) => {
+                setEmployee(data)
+            })
+    },
+    []
+    );
     
     const saveTicket = (event) => {
         event.preventDefault()
@@ -16,7 +29,7 @@ export const TicketForm = () => {
             description: ticket.description,
             emergency: ticket.emergency,
             customerId: parseInt(localStorage.getItem("honey_customer")),
-            employeeId: 1,
+            employeeId: ticket.employeeId,
             dateCompleted:""
         }
         const fetchOption = {
@@ -57,7 +70,7 @@ export const TicketForm = () => {
             </fieldset>
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="name">Emergency:</label>
+                    <label htmlFor="emergency">Emergency:</label>
                     <input type="checkbox"
                         onChange={
                             (evt)  => {
@@ -67,6 +80,23 @@ export const TicketForm = () => {
                             }
                         } />
                 </div>
+            </fieldset>
+            <fieldset>
+            <div className="form-group">
+                <label htmlFor="employeeAssigned">Assign Employee</label>
+                <select  onChange={
+                        (evt)  => {
+                            const copy = {...ticket}
+                            copy.employeeId = parseInt(evt.target.value)
+                            updateTicket(copy)
+                        }
+                    }>
+                        <option value="">Choose Employee</option>
+                        {employees.map((employee) => {
+                            return <option key={`${employee.id}`} value={employee.id}>{employee.name}</option>
+                        })}
+                    </select>
+            </div>
             </fieldset>
             <button className="btn btn-primary" onClick={saveTicket}>
                 Submit Ticket
