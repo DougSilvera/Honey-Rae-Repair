@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export const TicketList = () => {
@@ -27,7 +28,7 @@ export const TicketList = () => {
           return (
             <div className="ticket__card" key={`ticket--${ticketObject.id}`}>
               <p>
-                {ticketObject.description} Submitted by{" "}
+              <Link to={`/serviceTickets/${ticketObject.id}`}>{ticketObject.description}</Link> Submitted by{" "}
                 {ticketObject.customer.name}
               </p>
               <p>worked on by {ticketObject.employee.name}</p>
@@ -40,7 +41,7 @@ export const TicketList = () => {
               key={`ticket--${ticketObject.id}`}
             >
               <p>
-                {ticketObject.emergency ? "🚑" : ""} {ticketObject.description}{" "}
+                {ticketObject.emergency ? "🚑" : ""} <Link to={`/serviceTickets/${ticketObject.id}`}>{ticketObject.description}</Link>{" "}
                 Submitted by {ticketObject.customer.name}
               </p>
               <p>worked on by {ticketObject.employee.name}</p>

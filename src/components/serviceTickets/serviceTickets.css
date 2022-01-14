@@ -13,3 +13,14 @@
     background-size: cover;
     width: max-content;
 }
+
+.ticket_detail_parent {
+    margin: 5rem;
+    justify-content: center;
+    display:flex;
+}
+.ticket_detail {
+    background-color: lightseagreen;
+    margin: 5rem;
+    padding: 5rem;
+}
