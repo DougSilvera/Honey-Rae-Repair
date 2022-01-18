@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 export const TicketList = () => {
   const [tickets, setTickets] = useState([]);
   const history = useHistory();
+  
 
   useEffect(() => {
     fetch(
@@ -15,6 +16,15 @@ export const TicketList = () => {
         setTickets(tickets);
       });
   }, []);
+
+  const deleteTicket = (id) => {
+    fetch(`http://localhost:8088/serviceTickets/${id}`, {
+      method: "DELETE"
+    })
+    .then(() => {
+      history.go("/serviceTickets")
+    })
+  }
 
   return (
     <>
@@ -32,6 +42,7 @@ export const TicketList = () => {
                 {ticketObject.customer.name}
               </p>
               <p>worked on by {ticketObject.employee.name}</p>
+              <button className="delete-ticket" onClick={() => {deleteTicket(ticketObject.id)}}>Delete Service Ticket</button>
             </div>
           );
         } else {
@@ -45,6 +56,7 @@ export const TicketList = () => {
                 Submitted by {ticketObject.customer.name}
               </p>
               <p>worked on by {ticketObject.employee.name}</p>
+              <button className="delete-ticket" onClick={() => {deleteTicket(ticketObject.id)}}>Delete Service Ticket</button>
             </div>
           );
         }
