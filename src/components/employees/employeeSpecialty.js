@@ -1,14 +1,14 @@
 import React from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { useEffect, useState } from "react/cjs/react.development";
+import { getOneEmployee } from "../ApiManager";
 
 export const EmployeeSpecialty = () => {
     const [employee, setEmployee] = useState({})
     const {employeeId} = useParams()
 
     useEffect(() => {
-        fetch(`http://localhost:8088/employees/${employeeId}`)
-            .then(resp => resp.json())
+       getOneEmployee(employeeId)
             .then((data) => {
          setEmployee(data)
             })

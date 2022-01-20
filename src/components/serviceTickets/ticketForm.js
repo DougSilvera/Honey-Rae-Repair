@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useEffect } from "react/cjs/react.development";
-
+import { getAllEmployees, submitNewTicket} from "../ApiManager"
 
 export const TicketForm = () => {
     const [ticket, updateTicket] = useState({
@@ -13,8 +13,7 @@ export const TicketForm = () => {
     const history = useHistory();
 
     useEffect(() => {
-        fetch("http://localhost:8088/employees")
-            .then(resp => resp.json())
+        getAllEmployees()
             .then((data) => {
                 setEmployee(data)
             })
@@ -39,8 +38,7 @@ export const TicketForm = () => {
             },
             body: JSON.stringify(newTicket)
         }
-        return fetch("http://localhost:8088/serviceTickets", fetchOption)
-            .then(response => response.json())
+        return submitNewTicket(fetchOption)
             .then(() => {
                history.push("/serviceTickets")
 
