@@ -4,6 +4,7 @@ import {
   useHistory,
   useParams,
 } from "react-router-dom/cjs/react-router-dom.min";
+import { getAllEmployees, getSingleTicket, updateServiceTicket } from "../ApiManager";
 
 export const TicketDetail = () => {
   const [ticket, setTicket] = useState({});
@@ -12,17 +13,13 @@ export const TicketDetail = () => {
   const history = useHistory();
 
   useEffect(() => {
-    fetch("http://localhost:8088/employees")
-      .then((resp) => resp.json())
+   getAllEmployees()
       .then((data) => {
         setEmployees(data);
       });
   }, []);
   useEffect(() => {
-    fetch(
-      `http://localhost:8088/serviceTickets/${ticketId}?_expand=employee&_expand=customer`
-    )
-      .then((resp) => resp.json())
+   getSingleTicket(ticketId)
       .then((data) => {
         setTicket(data);
       });
@@ -33,18 +30,13 @@ export const TicketDetail = () => {
     const newTicketObject = {
       description: ticket.description,
       emergency: ticket.emergency,
-      customerId: parseInt(localStorage.getItem("honey_customer")),
+      customerId: ticket.customerId,
       employeeId: ticket.employeeId,
       dateCompleted: ticket.dateCompleted,
     };
 
-    return fetch(`http://localhost:8088/serviceTickets/${ticketId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newTicketObject),
-    }).then(() => {
+    return updateServiceTicket(ticketId, newTicketObject)
+    .then(() => {
       history.push("/serviceTickets");
     });
   };
